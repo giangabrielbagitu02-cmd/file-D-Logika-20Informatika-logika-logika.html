@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tabel Kebenaran Interaktif</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #1e3c72, #2a5298);
+      margin: 0;
+      padding: 0;
+      color: #fff;
+      text-align: center;
+    }
+    header {
+      padding: 30px;
+      background: rgba(0,0,0,0.3);
+    }
+    header h1 {
+      margin: 0;
+      font-size: 2.2em;
+      letter-spacing: 1px;
+    }
+    .container {
+      max-width: 900px;
+      margin: 30px auto;
+      background: rgba(255,255,255,0.1);
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+      animation: fadeIn 1s ease-in-out;
+    }
+    @keyframes fadeIn {
+      from {opacity:0; transform: translateY(20px);}
+      to {opacity:1; transform: translateY(0);}
+    }
+    h2 {
+      margin-top: 0;
+      color: #ffd700;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    th, td {
+      border: 1px solid #fff;
+      padding: 12px;
+      text-align: center;
+    }
+    th {
+      background: #ffd700;
+      color: #000;
+    }
+    td {
+      background: rgba(255,255,255,0.2);
+    }
+    .controls {
+      margin: 20px 0;
+    }
+    select, button {
+      padding: 10px 15px;
+      border-radius: 8px;
+      border: none;
+      margin: 5px;
+      font-size: 1em;
+      cursor: pointer;
+    }
+    select {
+      background: #fff;
+      color: #000;
+    }
+    button {
+      background: #ffd700;
+      color: #000;
+      font-weight: bold;
+      transition: transform 0.2s;
+    }
+    button:hover {
+      transform: scale(1.05);
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Tabel Kebenaran Interaktif</h1>
+    <p>Pilih operator logika dan lihat tabel kebenarannya</p>
+  </header>
+
+  <div class="container">
+    <div class="controls">
+      <label for="operator">Operator:</label>
+      <select id="operator">
+        <option value="AND">AND (∧)</option>
+        <option value="OR">OR (∨)</option>
+        <option value="IMP">Implikasi (→)</option>
+        <option value="BIC">Biimplikasi (↔)</option>
+        <option value="NOT">Negasi (¬p)</option>
+      </select>
+      <button onclick="generateTable()">Tampilkan</button>
+    </div>
+    <div id="tableArea"></div>
+  </div>
+
+  <script>
+    function generateTable() {
+      const op = document.getElementById("operator").value;
+      let html = "<table><thead><tr>";
+
+      if(op === "NOT") {
+        html += "<th>p</th><th>¬p</th></tr></thead><tbody>";
+        ["T","F"].forEach(p=>{
+          html += `<tr><td>${p}</td><td>${p==="T"?"F":"T"}</td></tr>`;
+        });
+      } else {
+        html += "<th>p</th><th>q</th><th>hasil</th></tr></thead><tbody>";
+        const values = ["T","F"];
+        values.forEach(p=>{
+          values.forEach(q=>{
+            let result;
+            if(op==="AND") result = (p==="T" && q==="T")?"T":"F";
+            if(op==="OR") result = (p==="T"||q==="T")?"T":"F";
+            if(op==="IMP") result = (p==="T" && q==="F")?"F":"T";
+            if(op==="BIC") result = (p===q)?"T":"F";
+            html += `<tr><td>${p}</td><td>${q}</td><td>${result}</td></tr>`;
+          });
+        });
+      }
+      html += "</tbody></table>";
+      document.getElementById("tableArea").innerHTML = html;
+    }
+  </script>
+</body>
+</html>
